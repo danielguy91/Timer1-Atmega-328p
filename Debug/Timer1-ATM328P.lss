@@ -3,29 +3,31 @@ Timer1-ATM328P.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  00000148  2**0
+  0 .data         00000000  00800100  00800100  000001a8  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000000f4  00000000  00000000  00000054  2**1
+  1 .text         00000134  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  00000148  2**0
+  2 .bss          00000002  00800100  00800100  000001a8  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000001a8  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000178  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000001d8  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000040  00000000  00000000  000001b8  2**0
+  5 .debug_aranges 00000038  00000000  00000000  00000218  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000762  00000000  00000000  000001f8  2**0
+  6 .debug_info   000006f5  00000000  00000000  00000250  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000683  00000000  00000000  0000095a  2**0
+  7 .debug_abbrev 0000064b  00000000  00000000  00000945  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000256  00000000  00000000  00000fdd  2**0
+  8 .debug_line   00000269  00000000  00000000  00000f90  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000078  00000000  00000000  00001234  2**2
+  9 .debug_frame  00000068  00000000  00000000  000011fc  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000003df  00000000  00000000  000012ac  2**0
+ 10 .debug_str    000003b0  00000000  00000000  00001264  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000000a1  00000000  00000000  0000168b  2**0
+ 11 .debug_loc    00000049  00000000  00000000  00001614  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000030  00000000  00000000  0000172c  2**0
+ 12 .debug_ranges 00000028  00000000  00000000  0000165d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -42,7 +44,7 @@ Disassembly of section .text:
   20:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   24:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   28:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
-  2c:	0c 94 59 00 	jmp	0xb2	; 0xb2 <__vector_11>
+  2c:	0c 94 6c 00 	jmp	0xd8	; 0xd8 <__vector_11>
   30:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   34:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   38:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
@@ -76,22 +78,22 @@ Disassembly of section .text:
   7c:	1d 92       	st	X+, r1
 
 0000007e <.do_clear_bss_start>:
-  7e:	a0 30       	cpi	r26, 0x00	; 0
+  7e:	a2 30       	cpi	r26, 0x02	; 2
   80:	b2 07       	cpc	r27, r18
   82:	e1 f7       	brne	.-8      	; 0x7c <.do_clear_bss_loop>
-  84:	0e 94 72 00 	call	0xe4	; 0xe4 <main>
-  88:	0c 94 78 00 	jmp	0xf0	; 0xf0 <_exit>
+  84:	0e 94 60 00 	call	0xc0	; 0xc0 <main>
+  88:	0c 94 98 00 	jmp	0x130	; 0x130 <_exit>
 
 0000008c <__bad_interrupt>:
   8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000090 <initTimers10ms>:
-			  PEstado = Es bit del puerto a configurar
-			  Estado =  Si esta configurado como encendido (1) o apagado (0)
-*/     
+volatile  uint16_t timeOut1ms;
+
+//------------------------------------------------------
 
 void  initTimers10ms () {
-	OCR1A =625 ;                            // Valor de compracion 
+	OCR1A =625 ;                            // Valor de compracion para 10 ms
   90:	81 e7       	ldi	r24, 0x71	; 113
   92:	92 e0       	ldi	r25, 0x02	; 2
   94:	90 93 89 00 	sts	0x0089, r25	; 0x800089 <__TEXT_REGION_LENGTH__+0x7f8089>
@@ -107,68 +109,99 @@ void  initTimers10ms () {
   ac:	80 93 81 00 	sts	0x0081, r24	; 0x800081 <__TEXT_REGION_LENGTH__+0x7f8081>
   b0:	08 95       	ret
 
-000000b2 <__vector_11>:
-	                                        // Para poner a cero un registro lo igualo por el mismo  DDRB=DDRB 
+000000b2 <initPortimer>:
 }
 
 
-ISR (TIMER1_COMPA_vect) {
-  b2:	1f 92       	push	r1
-  b4:	0f 92       	push	r0
-  b6:	0f b6       	in	r0, 0x3f	; 63
-  b8:	0f 92       	push	r0
-  ba:	11 24       	eor	r1, r1
-  bc:	8f 93       	push	r24
-  be:	9f 93       	push	r25
-		if (PORTB & ( 1 << PORTB5)) // desplazo al numero 1 cinco veces para que aparezca en la posicion 5
-		PORTB & = ~ ( 1 << PORTB5); // ~ (1 << PORTB5) = 11011111 hago cero el bit 5 de PORTB5
-		else
-		PORTB | = ( 1 << PORTB5);
-	}*/
-	 PORTB ^= (1<<5);
-  c0:	95 b1       	in	r25, 0x05	; 5
-  c2:	80 e2       	ldi	r24, 0x20	; 32
-  c4:	89 27       	eor	r24, r25
-  c6:	85 b9       	out	0x05, r24	; 5
-	
-}
-  c8:	9f 91       	pop	r25
-  ca:	8f 91       	pop	r24
-  cc:	0f 90       	pop	r0
-  ce:	0f be       	out	0x3f, r0	; 63
-  d0:	0f 90       	pop	r0
-  d2:	1f 90       	pop	r1
-  d4:	18 95       	reti
 
-000000d6 <initPortimer>:
-	
 void initPortimer(){
    DDRB |= (1<<DDB5);
-  d6:	84 b1       	in	r24, 0x04	; 4
-  d8:	80 62       	ori	r24, 0x20	; 32
-  da:	84 b9       	out	0x04, r24	; 4
+  b2:	84 b1       	in	r24, 0x04	; 4
+  b4:	80 62       	ori	r24, 0x20	; 32
+  b6:	84 b9       	out	0x04, r24	; 4
    PORTB |= (1<<PORTB5);
-  dc:	85 b1       	in	r24, 0x05	; 5
-  de:	80 62       	ori	r24, 0x20	; 32
-  e0:	85 b9       	out	0x05, r24	; 5
-  e2:	08 95       	ret
+  b8:	85 b1       	in	r24, 0x05	; 5
+  ba:	80 62       	ori	r24, 0x20	; 32
+  bc:	85 b9       	out	0x05, r24	; 5
+  be:	08 95       	ret
 
-000000e4 <main>:
+000000c0 <main>:
 	
 }	
 
 
 int main(void) {
     initPortimer();
-  e4:	0e 94 6b 00 	call	0xd6	; 0xd6 <initPortimer>
-	sei();
-  e8:	78 94       	sei
+  c0:	0e 94 59 00 	call	0xb2	; 0xb2 <initPortimer>
+	sei();                     //Activa interrupciones en el micro
+  c4:	78 94       	sei
     initTimers10ms ();
-  ea:	0e 94 48 00 	call	0x90	; 0x90 <initTimers10ms>
-  ee:	ff cf       	rjmp	.-2      	; 0xee <main+0xa>
+  c6:	0e 94 48 00 	call	0x90	; 0x90 <initTimers10ms>
+	timeOut1ms=timeEjecucion ;            // configuro en 250 ms
+  ca:	89 e1       	ldi	r24, 0x19	; 25
+  cc:	90 e0       	ldi	r25, 0x00	; 0
+  ce:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+  d2:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+  d6:	ff cf       	rjmp	.-2      	; 0xd6 <main+0x16>
 
-000000f0 <_exit>:
-  f0:	f8 94       	cli
+000000d8 <__vector_11>:
+	
+	}
 
-000000f2 <__stop_program>:
-  f2:	ff cf       	rjmp	.-2      	; 0xf2 <__stop_program>
+}
+
+ISR (TIMER1_COMPA_vect) {                           // Interrupcion del timer1
+  d8:	1f 92       	push	r1
+  da:	0f 92       	push	r0
+  dc:	0f b6       	in	r0, 0x3f	; 63
+  de:	0f 92       	push	r0
+  e0:	11 24       	eor	r1, r1
+  e2:	8f 93       	push	r24
+  e4:	9f 93       	push	r25
+	timeOut1ms--;
+  e6:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+  ea:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+  ee:	01 97       	sbiw	r24, 0x01	; 1
+  f0:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+  f4:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+	if (! timeOut1ms) {
+  f8:	80 91 00 01 	lds	r24, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+  fc:	90 91 01 01 	lds	r25, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 100:	89 2b       	or	r24, r25
+ 102:	79 f4       	brne	.+30     	; 0x122 <__vector_11+0x4a>
+		timeOut1ms = timeEjecucion ;
+ 104:	89 e1       	ldi	r24, 0x19	; 25
+ 106:	90 e0       	ldi	r25, 0x00	; 0
+ 108:	90 93 01 01 	sts	0x0101, r25	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+ 10c:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+		// (1 << PORTB5 1) desplazado por B5 es igual a 00100000
+		if (PORTB & ( 1 << PORTB5)){ // desplazo al numero 1 cinco veces para que aparezca en la posicion 5
+ 110:	2d 9b       	sbis	0x05, 5	; 5
+ 112:	04 c0       	rjmp	.+8      	; 0x11c <__vector_11+0x44>
+		PORTB &= ~( 1 << PORTB5);} // ~ (1 << PORTB5) = 11011111 hago cero el bit 5 de PORTB5
+ 114:	85 b1       	in	r24, 0x05	; 5
+ 116:	8f 7d       	andi	r24, 0xDF	; 223
+ 118:	85 b9       	out	0x05, r24	; 5
+ 11a:	03 c0       	rjmp	.+6      	; 0x122 <__vector_11+0x4a>
+		else{
+		PORTB |= ( 1 << PORTB5);}
+ 11c:	85 b1       	in	r24, 0x05	; 5
+ 11e:	80 62       	ori	r24, 0x20	; 32
+ 120:	85 b9       	out	0x05, r24	; 5
+	}
+	 //PORTB ^= (1<<5);
+	
+}
+ 122:	9f 91       	pop	r25
+ 124:	8f 91       	pop	r24
+ 126:	0f 90       	pop	r0
+ 128:	0f be       	out	0x3f, r0	; 63
+ 12a:	0f 90       	pop	r0
+ 12c:	1f 90       	pop	r1
+ 12e:	18 95       	reti
+
+00000130 <_exit>:
+ 130:	f8 94       	cli
+
+00000132 <__stop_program>:
+ 132:	ff cf       	rjmp	.-2      	; 0x132 <__stop_program>
