@@ -179,7 +179,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000       0xe6
+.text           0x00000000       0xf4
  *(.vectors)
  .vectors       0x00000000       0x68 D:/Program Files (x86)/Microchip Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -269,13 +269,16 @@ END GROUP
  .text.__vector_11
                 0x000000b2       0x24 main.o
                 0x000000b2                __vector_11
- .text.main     0x000000d6        0xc main.o
-                0x000000d6                main
-                0x000000e2                . = ALIGN (0x2)
+ .text.initPortimer
+                0x000000d6        0xe main.o
+                0x000000d6                initPortimer
+ .text.main     0x000000e4        0xc main.o
+                0x000000e4                main
+                0x000000f0                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000000e2        0x0 d:/program files (x86)/microchip studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x000000e2                _exit
-                0x000000e2                exit
+ .fini9         0x000000f0        0x0 d:/program files (x86)/microchip studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x000000f0                _exit
+                0x000000f0                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -294,11 +297,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000000e2        0x4 d:/program files (x86)/microchip studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x000000f0        0x4 d:/program files (x86)/microchip studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000000e6                _etext = .
+                0x000000f4                _etext = .
 
-.data           0x00800100        0x0 load address 0x000000e6
+.data           0x00800100        0x0 load address 0x000000f4
                 [!provide]                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -316,8 +319,8 @@ END GROUP
  *(.bss*)
  *(COMMON)
                 0x00800100                PROVIDE (__bss_end, .)
-                0x000000e6                __data_load_start = LOADADDR (.data)
-                0x000000e6                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x000000f4                __data_load_start = LOADADDR (.data)
+                0x000000f4                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800100        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -388,38 +391,38 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x38
+.debug_aranges  0x00000000       0x40
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x38 main.o
+                0x00000000       0x40 main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x744
+.debug_info     0x00000000      0x762
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 D:/Program Files (x86)/Microchip Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_info    0x000005f4      0x150 main.o
+ .debug_info    0x000005f4      0x16e main.o
 
 .debug_abbrev   0x00000000      0x683
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x5a2 D:/Program Files (x86)/Microchip Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_abbrev  0x000005a2       0xe1 main.o
 
-.debug_line     0x00000000      0x239
+.debug_line     0x00000000      0x256
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x134 D:/Program Files (x86)/Microchip Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_line    0x00000134      0x105 main.o
+ .debug_line    0x00000134      0x122 main.o
 
-.debug_frame    0x00000000       0x68
+.debug_frame    0x00000000       0x78
  *(.debug_frame)
- .debug_frame   0x00000000       0x68 main.o
+ .debug_frame   0x00000000       0x78 main.o
 
-.debug_str      0x00000000      0x3d2
+.debug_str      0x00000000      0x3df
  *(.debug_str)
  .debug_str     0x00000000      0x208 D:/Program Files (x86)/Microchip Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_str     0x00000208      0x1ca main.o
-                                0x20f (size before relaxing)
+ .debug_str     0x00000208      0x1d7 main.o
+                                0x21c (size before relaxing)
 
 .debug_loc      0x00000000       0xa1
  *(.debug_loc)
@@ -443,9 +446,9 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x28
+.debug_ranges   0x00000000       0x30
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x28 main.o
+ .debug_ranges  0x00000000       0x30 main.o
 
 .debug_macro
  *(.debug_macro)
